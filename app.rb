@@ -5,7 +5,7 @@ include Clockwork
 
 Dotenv.load
 
-URL = 'https://travel.yahoo.co.jp/dhotel/shisetsu/HT10024471/IKYU/10919248/10029392/?ci=20201202&co=20201203&rm=1&adlt=2'
+URL = 'https://travel.yahoo.co.jp/dhotel/shisetsu/HT10020366/IKYU/10950168/10013731?ci=20201202&co=20201203&rm=1&adlt=2'
 
 def client
   Line::Bot::Client.new do |config|
