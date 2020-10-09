@@ -5,6 +5,9 @@ GEM
     dotenv (2.7.6)
     line-bot-api (1.16.0)
     method_source (1.0.0)
+    mini_portile2 (2.4.0)
+    nokogiri (1.10.10)
+      mini_portile2 (~> 2.4.0)
     pry (0.13.1)
       coderay (~> 1.1)
       method_source (~> 1.0)
@@ -15,6 +18,7 @@ PLATFORMS
 DEPENDENCIES
   dotenv
   line-bot-api
+  nokogiri
   pry
 
 BUNDLED WITH
