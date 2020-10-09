@@ -1,6 +1,8 @@
 Bundler.require
 require 'open-uri'
 
+include Clockwork
+
 Dotenv.load
 
 URL = 'https://travel.yahoo.co.jp/dhotel/shisetsu/HT10024471/IKYU/10919248/10029392/?ci=20201202&co=20201203&rm=1&adlt=2'
@@ -30,21 +32,31 @@ def text_message_json(text)
   }
 end
 
-remaining_room_info_element = get_remaining_room_info_element
+$previous_room_count = nil
 
-text = if remaining_room_info_element.nil?
-         'まだまだヨユーだロボ👌'
-       else
-         binding.pry
-         remaining_room_count = remaining_room_info_element.text.match(/\d+/)[0].to_i
-         "あと#{remaining_room_count}部屋だロボ🤖"
-       end
+every(1.hour, at: '09:00', tz: 'Asia/Tokyo') do
+  begin
+    text = nil
+    room_count = nil
 
-text += "\n#{URL}"
+    remaining_room_info_element = get_remaining_room_info_element
 
-client.broadcast(text_message_json(text))
+    if remaining_room_info_element.nil?
+      room_count = nil
+      text = 'まだまだヨユーだロボ！'
+    else
+      room_count = remaining_room_info_element.text.match(/\d+/)[0].to_i
+      text =  "あと#{room_count}部屋だロボ！"
+    end
 
-binding.pry
+    text += "\n#{URL}"
 
-p :finish
+    client.broadcast(text_message_json('残り部屋数が変わったヨ')) if $previous_room_count != room_count
+    client.broadcast(text_message_json(text)) if $previous_room_count != room_count || [9, 21].include?(Time.now.hour)
+
+    $previous_room_count = room_count
+  rescue => ex
+    client.broadcast(text_message_json("エラー\n#{ex.message}"))
+  end
+end
 
