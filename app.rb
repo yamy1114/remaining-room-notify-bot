@@ -34,7 +34,7 @@ end
 
 $previous_room_count = nil
 
-every(1.hour, at: '09:00', tz: 'Asia/Tokyo') do
+every(1.hour, tz: 'Asia/Tokyo') do
   begin
     text = nil
     room_count = nil
